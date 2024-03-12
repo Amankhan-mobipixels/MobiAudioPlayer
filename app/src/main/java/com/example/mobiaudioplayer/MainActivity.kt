@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         val intent = Intent(this, MobiAudioPlayer::class.java)
         intent.putExtra("playListName","Downloads")
-        intent.putExtra("data",getFilePath())
+        intent.putStringArrayListExtra("data",getFilePath())
         startActivity(intent)
     }
     private fun getFilePath(): ArrayList<String> {
