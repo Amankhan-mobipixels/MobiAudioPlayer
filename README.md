@@ -21,6 +21,6 @@ How to use:
 
         val intent = Intent(this, MobiAudioPlayer::class.java)
         intent.putExtra("playListName","Downloads")
-        intent.putExtra("data",getFilePath())
+        intent.putStringArrayListExtra("data", list)
         startActivity(intent)
    
