@@ -18,7 +18,7 @@
             android:layout_width="80dp"
             android:layout_height="70dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/music_icon" />
+            android:src="@drawable/mobi_audio_music_icon" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +47,7 @@
                 <ImageView
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:src="@drawable/ic_play" />
+                    android:src="@drawable/ic_mobi_audio_play" />
 
                 <TextView
                     android:id="@+id/duration"

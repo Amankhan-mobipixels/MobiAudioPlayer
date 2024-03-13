@@ -17,8 +17,6 @@ import android.media.PlaybackParams
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.Gravity
 import android.view.ViewGroup
 import android.view.Window
@@ -82,7 +80,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         binding.toolbar.setNavigationOnClickListener{
             finish()
         }
-        binding.toolbar.setNavigationIcon(R.drawable.ic_back)
+        binding.toolbar.setNavigationIcon(R.drawable.ic_mobi_audio_back)
 
         binding.playListName.text = intent.getStringExtra("playListName")
         allAudioFiles = intent.getStringArrayListExtra("data") as ArrayList<String>
@@ -136,10 +134,10 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         dialogAudioTitle?.text = File(allAudioFiles[currentPlayingIndex]).name
         dialogProgressSeekBar?.max = mediaPlayer!!.duration
 
-        if (isPlaying) dialogBtnPlayPause?.setImageResource(R.drawable.ic_pause)
-        else   dialogBtnPlayPause?.setImageResource(R.drawable.ic_play)
-        if (getLoop()) btnRepeat.setImageResource(R.drawable.ic_repeat)
-        else btnRepeat.setImageResource(R.drawable.ic_repeat_one)
+        if (isPlaying) dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_pause)
+        else   dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_play)
+        if (getLoop()) btnRepeat.setImageResource(R.drawable.ic_mobi_audio_repeat)
+        else btnRepeat.setImageResource(R.drawable.ic_mobi_audio_repeat_one)
 
         dialogThumbnail?.setImageBitmap(getAudioThumbnail(allAudioFiles[currentPlayingIndex]))
         speedText.text = "${speeds[speeds.indexOf(getPlaySpeed())]}x"
@@ -158,11 +156,11 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         btnRepeat.setOnClickListener {
             if (getLoop()){
                 setLoop(false)
-                btnRepeat.setImageResource(R.drawable.ic_repeat_one)
+                btnRepeat.setImageResource(R.drawable.ic_mobi_audio_repeat_one)
             }
             else{
                 setLoop(true)
-                btnRepeat.setImageResource(R.drawable.ic_repeat)
+                btnRepeat.setImageResource(R.drawable.ic_mobi_audio_repeat)
             }
 
         }
@@ -220,8 +218,8 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         if (mediaPlayer != null && isPlaying) {
             mediaPlayer?.pause()
             isPlaying = false
-            binding.btnPlayPause.setImageResource(R.drawable.ic_play)
-            dialogBtnPlayPause?.setImageResource(R.drawable.ic_play)
+            binding.btnPlayPause.setImageResource(R.drawable.ic_mobi_audio_play)
+            dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_play)
             createNotification(File(allAudioFiles[currentPlayingIndex]).name)
             return
 
@@ -229,8 +227,8 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         if (mediaPlayer != null && !isPlaying){
             mediaPlayer?.start()
             isPlaying = true
-            binding.btnPlayPause.setImageResource(R.drawable.ic_pause)
-            dialogBtnPlayPause?.setImageResource(R.drawable.ic_pause)
+            binding.btnPlayPause.setImageResource(R.drawable.ic_mobi_audio_pause)
+            dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_pause)
             createNotification(File(allAudioFiles[currentPlayingIndex]).name)
             return
         }
@@ -276,11 +274,11 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
 
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle(name)
-            .setSmallIcon(R.drawable.ic_notification_icon)
+            .setSmallIcon(R.drawable.ic_mobi_audio_notification_icon)
             .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_previous, "Previous", previousPendingIntent)
-            .addAction(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play, "Play/Pause", playPausePendingIntent)
-            .addAction(R.drawable.ic_next, "Next", nextPendingIntent)
+            .addAction(R.drawable.ic_mobi_audio_previous, "Previous", previousPendingIntent)
+            .addAction(if (isPlaying) R.drawable.ic_mobi_audio_pause else R.drawable.ic_mobi_audio_play, "Play/Pause", playPausePendingIntent)
+            .addAction(R.drawable.ic_mobi_audio_next, "Next", nextPendingIntent)
             .setAutoCancel(true)
             .setShowWhen(false)
             .setOngoing(true)
@@ -308,8 +306,8 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             mediaPlayer = MediaPlayer()
             mediaPlayer?.setDataSource(audioPath)
             mediaPlayer?.prepare()
-            binding.btnPlayPause.setImageResource(R.drawable.ic_pause)
-            dialogBtnPlayPause?.setImageResource(R.drawable.ic_pause)
+            binding.btnPlayPause.setImageResource(R.drawable.ic_mobi_audio_pause)
+            dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_pause)
             mediaPlayer?.setOnCompletionListener {
                 if (getLoop()) currentPlayingIndex++
 
@@ -391,7 +389,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         return if (rawArt != null) {
             BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size)
         } else {
-            BitmapFactory.decodeResource(resources, R.drawable.music_icon)
+            BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
         }
     }
     private fun startProgress(){

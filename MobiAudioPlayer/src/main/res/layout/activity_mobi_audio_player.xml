@@ -39,7 +39,7 @@
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/music_icon"
+                android:src="@drawable/mobi_audio_music_icon"
                 android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
 
@@ -82,7 +82,7 @@
 
             android:layout_centerVertical="true"
             android:visibility="visible"
-            app:srcCompat="@drawable/ic_pause"
+            app:srcCompat="@drawable/ic_mobi_audio_pause"
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>
 </RelativeLayout>

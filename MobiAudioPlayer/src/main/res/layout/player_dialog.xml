@@ -9,7 +9,7 @@
         android:id="@+id/close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_close"/>
+        android:src="@drawable/ic_mobi_audio_close"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/music_icon"/>
+            android:src="@drawable/mobi_audio_music_icon"/>
     </androidx.cardview.widget.CardView>
     <TextView
         android:layout_marginTop="10dp"
@@ -120,7 +120,7 @@
             app:layout_constraintStart_toEndOf="@id/btnPrev"
             app:layout_constraintTop_toTopOf="@id/btnPrev"
             app:layout_goneMarginEnd="8dp"
-            app:srcCompat="@drawable/ic_speed" />
+            app:srcCompat="@drawable/ic_mobi_audio_speed" />
 
         <TextView
             android:id="@+id/speedText"
@@ -155,7 +155,7 @@
             app:layout_constraintStart_toEndOf="@id/view_stub"
             app:layout_constraintTop_toTopOf="@id/btnNext"
             app:layout_goneMarginStart="8dp"
-            app:srcCompat="@drawable/ic_repeat" />
+            app:srcCompat="@drawable/ic_mobi_audio_repeat" />
 
         <ImageButton
             android:id="@+id/btnPlayPause"
@@ -168,7 +168,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btnNext"
             app:layout_constraintStart_toEndOf="@id/btnPrev"
-            app:srcCompat="@drawable/ic_pause" />
+            app:srcCompat="@drawable/ic_mobi_audio_pause" />
 
 
         <ImageButton
@@ -184,7 +184,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progressSeekBar"
-            app:srcCompat="@drawable/ic_next" />
+            app:srcCompat="@drawable/ic_mobi_audio_next" />
 
         <ImageButton
             android:id="@+id/btnPrev"
@@ -199,7 +199,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/progressSeekBar"
-            app:srcCompat="@drawable/ic_previous" />
+            app:srcCompat="@drawable/ic_mobi_audio_previous" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
