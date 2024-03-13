@@ -79,6 +79,7 @@
             android:layout_height="35dp"
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="fitXY"
+
             android:layout_centerVertical="true"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_pause"
