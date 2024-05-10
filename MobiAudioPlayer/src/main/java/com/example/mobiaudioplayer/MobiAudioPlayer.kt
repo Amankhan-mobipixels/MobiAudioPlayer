@@ -26,6 +26,7 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.audioplayer.AudioAdapter
 import com.example.audioplayer.getLoop
@@ -240,7 +241,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             addAction(ACTION_NEXT)
             addAction(ACTION_PREVIOUS)
         }
-        registerReceiver(audioBroadcastReceiver, intentFilter)
+        ContextCompat.registerReceiver( this, audioBroadcastReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED )
     }
     private fun createNotification(name: String): Notification {
         // Create notification channel (for Android Oreo and above)

@@ -58,16 +58,16 @@ class AudioAdapter(val context:Context, val list: List<String>, val listener : C
 
     }
     private fun getAudioThumbnail(audioPath: String): Bitmap? {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(audioPath)
-
-        val rawArt: ByteArray? = retriever.embeddedPicture
-
-        return if (rawArt != null) {
-            BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size)
-        } else {
-             BitmapFactory.decodeResource(context.resources, R.drawable.mobi_audio_music_icon)
-        }
+//        val retriever = MediaMetadataRetriever()
+//        retriever.setDataSource(audioPath)
+//
+//        val rawArt: ByteArray? = retriever.embeddedPicture
+//
+//        return if (rawArt != null) {
+//            BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size)
+//        } else {
+            return BitmapFactory.decodeResource(context.resources, R.drawable.mobi_audio_music_icon)
+//        }
     }
 
     private fun getAudioDuration(audioPath: String): String {
