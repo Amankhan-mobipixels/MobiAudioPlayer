@@ -84,6 +84,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         binding.toolbar.setNavigationIcon(R.drawable.ic_mobi_audio_back)
 
         binding.playListName.text = intent.getStringExtra("playListName")
+        currentPlayingIndex = intent.getIntExtra("position",0)
         allAudioFiles = intent.getStringArrayListExtra("data") as ArrayList<String>
 
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
