@@ -282,6 +282,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             .addAction(if (isPlaying) R.drawable.ic_mobi_audio_pause else R.drawable.ic_mobi_audio_play, "Play/Pause", playPausePendingIntent)
             .addAction(R.drawable.ic_mobi_audio_next, "Next", nextPendingIntent)
             .setAutoCancel(true)
+            .setNotificationSilent()
             .setShowWhen(false)
             .setOngoing(true)
             .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
