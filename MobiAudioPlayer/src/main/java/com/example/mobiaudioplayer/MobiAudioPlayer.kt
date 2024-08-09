@@ -126,7 +126,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         val btnNext = dialog.findViewById<ImageButton>(R.id.btnNext)
         val btnPrev = dialog.findViewById<ImageButton>(R.id.btnPrev)
         val btnRepeat = dialog.findViewById<ImageButton>(R.id.btnRepeat)
-        val btnSpeed = dialog.findViewById<ImageButton>(R.id.btnSpeed)
+//        val btnSpeed = dialog.findViewById<ImageButton>(R.id.btnSpeed)
         dialogThumbnail = dialog.findViewById(R.id.thumnail)
         dialogBtnPlayPause = dialog.findViewById(R.id.btnPlayPause)
         dialogProgressSeekBar = dialog.findViewById(R.id.progressSeekBar)
@@ -166,7 +166,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             }
 
         }
-        btnSpeed.setOnClickListener {
+        speedText.setOnClickListener {
             var index = speeds.indexOf(getPlaySpeed())
             index++
             if (index>speeds.size-1) index = 0

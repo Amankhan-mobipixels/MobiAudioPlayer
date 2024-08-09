@@ -28,8 +28,8 @@ class AudioAdapter(val context:Context, val list: List<String>, val listener : C
     override fun onBindViewHolder(holder: AudioAdapterViewHolder, position: Int) {
         holder.audioTitle.text = File(list[position]).name
 
-        if (position==currentPlayingIndex) holder.card.setCardBackgroundColor(Color.parseColor("#346ADE"))
-        else  holder.card.setCardBackgroundColor(Color.parseColor("#F7F8FA"))
+        if (position==currentPlayingIndex) holder.audioTitle.setTextColor(Color.parseColor("#346ADE"))
+        else  holder.audioTitle.setTextColor(Color.parseColor("#000000"))
         holder.audioImage.setImageBitmap(getAudioThumbnail(File(list[position]).path))
         holder.duration.text = getAudioDuration(File(list[position]).path)
         holder.itemView.setOnClickListener { // Triggers click upwards to the adapter on click

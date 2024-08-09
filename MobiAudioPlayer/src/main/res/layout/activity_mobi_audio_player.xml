@@ -61,7 +61,7 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:scrollHorizontally="true"
                 android:textAlignment="center"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="16dp"
                 tools:text="Some music awesome music name..."
                 android:singleLine="true" />
@@ -69,17 +69,16 @@
                 android:id="@+id/progressSeekBar"
                 android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
-                android:thumbTint="#000"
-                android:progressTint="#000"
+                android:thumbTint="#ffffff"
+                android:progressTint="#ffffff"
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <ImageButton
             android:id="@+id/btnPlayPause"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?selectableItemBackgroundBorderless"
             android:scaleType="fitXY"
-
             android:layout_centerVertical="true"
             android:visibility="visible"
             app:srcCompat="@drawable/ic_mobi_audio_pause"
