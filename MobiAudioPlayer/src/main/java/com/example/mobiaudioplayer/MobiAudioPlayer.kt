@@ -396,7 +396,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
                 BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
             }
         }
-        catch (e:IllegalStateException){
+        catch (e:IllegalArgumentException){
             return  BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
         }
 

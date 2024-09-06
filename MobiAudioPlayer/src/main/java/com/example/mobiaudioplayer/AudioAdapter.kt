@@ -69,7 +69,7 @@ class AudioAdapter(val context:Context, val list: List<String>, val listener : C
                 BitmapFactory.decodeResource(context.resources, R.drawable.mobi_audio_music_icon)
             }
         }
-        catch (e:IllegalStateException){
+        catch (e:IllegalArgumentException){
             return  BitmapFactory.decodeResource(context.resources, R.drawable.mobi_audio_music_icon)
         }
     }
