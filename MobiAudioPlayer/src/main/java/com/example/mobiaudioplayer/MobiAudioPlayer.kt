@@ -384,16 +384,22 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         }
     }
     private fun getAudioThumbnail(audioPath: String): Bitmap? {
-        val retriever = MediaMetadataRetriever()
-        retriever.setDataSource(audioPath)
+        try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(audioPath)
 
-        val rawArt: ByteArray? = retriever.embeddedPicture
+            val rawArt: ByteArray? = retriever.embeddedPicture
 
-        return if (rawArt != null) {
-            BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size)
-        } else {
-            BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
+            return if (rawArt != null) {
+                BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size)
+            } else {
+                BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
+            }
         }
+        catch (e:IllegalStateException){
+            return  BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
+        }
+
     }
     private fun startProgress(){
         currentDurationJob = CoroutineScope(Dispatchers.Main).launch {
