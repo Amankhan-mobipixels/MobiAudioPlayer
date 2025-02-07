@@ -30,7 +30,7 @@
             android:id="@+id/thumnail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:background="#09000000"
             android:src="@drawable/mobi_audio_music_icon"/>
     </androidx.cardview.widget.CardView>
     <TextView

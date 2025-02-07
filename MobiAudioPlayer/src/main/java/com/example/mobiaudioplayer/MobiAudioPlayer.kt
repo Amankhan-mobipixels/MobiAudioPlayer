@@ -17,7 +17,9 @@ import android.media.PlaybackParams
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.Gravity
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
@@ -27,6 +29,7 @@ import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.TimeUtils.formatDuration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.audioplayer.AudioAdapter
 import com.example.audioplayer.getLoop
@@ -40,10 +43,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 import java.io.IOException
 
 class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
+    private var icon: Bitmap? = null
     private var dialogThumbnail: ImageView? = null
     private var dialogAudioTitle: TextView? = null
     private var dialogBtnPlayPause: ImageButton? = null
@@ -61,7 +68,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
     private var currentDurationJob: Job? = null
     private var mediaPlayer: MediaPlayer? = null
     private var currentPlayingIndex = 0
-    private var allAudioFiles = ArrayList<String>()
+    private var allAudioFiles = ArrayList<Data>()
     private var notificationManager: NotificationManager? = null
     private var adapter: AudioAdapter? = null
     private var isPlaying = false
@@ -85,16 +92,29 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
 
         binding.playListName.text = intent.getStringExtra("playListName")
         currentPlayingIndex = intent.getIntExtra("position",0)
-        allAudioFiles = intent.getStringArrayListExtra("data") as ArrayList<String>
+        val list = intent.getStringArrayListExtra("data") as ArrayList<String>
+         icon = intent.getParcelableExtra<Bitmap>("icon")
+        val iconSize = intent.getIntExtra("iconSize",150)
+        if (icon==null) icon = BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
 
-        binding.recyclerview.layoutManager = LinearLayoutManager(this)
-        adapter = AudioAdapter(this, allAudioFiles,this)
-        binding.recyclerview.adapter = adapter
+        CoroutineScope(Dispatchers.Main).launch {
+            allAudioFiles.addAll(list.map { path -> Data(path, getDurationFromMediaStore(path)) })
+            binding.loading.visibility = View.GONE
+            binding.parent.visibility = View.VISIBLE
 
-        if (allAudioFiles.size!=0)  {
-            registerBroadcastReceiver()
-            playAudio(allAudioFiles[currentPlayingIndex])
+            binding.recyclerview.layoutManager = LinearLayoutManager(this@MobiAudioPlayer)
+            adapter = AudioAdapter(this@MobiAudioPlayer,icon!!,iconSize, allAudioFiles,this@MobiAudioPlayer)
+            binding.recyclerview.adapter = adapter
+
+            if (allAudioFiles.size!=0)  {
+                registerBroadcastReceiver()
+                playAudio(allAudioFiles[currentPlayingIndex].path)
+            }
         }
+
+
+
+
 
         binding.btnPlayPause.setOnClickListener {
             playPause()
@@ -133,7 +153,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         val speedText = dialog.findViewById<TextView>(R.id.speedText)
         dialogTotalDuration = dialog.findViewById(R.id.totalDuration)
         dialogCurrentDuration = dialog.findViewById(R.id.currentDuration)
-        dialogAudioTitle?.text = File(allAudioFiles[currentPlayingIndex]).name
+        dialogAudioTitle?.text = File(allAudioFiles[currentPlayingIndex].path).name
         dialogProgressSeekBar?.max = mediaPlayer!!.duration
 
         if (isPlaying) dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_pause)
@@ -141,7 +161,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         if (getLoop()) btnRepeat.setImageResource(R.drawable.ic_mobi_audio_repeat)
         else btnRepeat.setImageResource(R.drawable.ic_mobi_audio_repeat_one)
 
-        dialogThumbnail?.setImageBitmap(getAudioThumbnail(allAudioFiles[currentPlayingIndex]))
+        dialogThumbnail?.setImageBitmap(icon)
         speedText.text = "${speeds[speeds.indexOf(getPlaySpeed())]}x"
 
 
@@ -222,7 +242,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             isPlaying = false
             binding.btnPlayPause.setImageResource(R.drawable.ic_mobi_audio_play)
             dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_play)
-            createNotification(File(allAudioFiles[currentPlayingIndex]).name)
+            createNotification(File(allAudioFiles[currentPlayingIndex].path).name)
             return
 
         }
@@ -231,7 +251,7 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             isPlaying = true
             binding.btnPlayPause.setImageResource(R.drawable.ic_mobi_audio_pause)
             dialogBtnPlayPause?.setImageResource(R.drawable.ic_mobi_audio_pause)
-            createNotification(File(allAudioFiles[currentPlayingIndex]).name)
+            createNotification(File(allAudioFiles[currentPlayingIndex].path).name)
             return
         }
     }
@@ -315,25 +335,25 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
                 if (getLoop()) currentPlayingIndex++
 
                 if (currentPlayingIndex < allAudioFiles.size) {
-                    playAudio(allAudioFiles[currentPlayingIndex])
+                    playAudio(allAudioFiles[currentPlayingIndex].path)
                 } else {
 //                          for last item whether its play or not
 //                        mediaPlayer?.release()
 //                        mediaPlayer = null
                     currentPlayingIndex = 0
-                    playAudio(allAudioFiles[currentPlayingIndex])
+                    playAudio(allAudioFiles[currentPlayingIndex].path)
                 }
             }
 
-            binding.audioTitle.text = File(allAudioFiles[currentPlayingIndex]).name
-            dialogAudioTitle?.text = File(allAudioFiles[currentPlayingIndex]).name
+            binding.audioTitle.text = File(allAudioFiles[currentPlayingIndex].path).name
+            dialogAudioTitle?.text = File(allAudioFiles[currentPlayingIndex].path).name
             dialogTotalDuration?.text = getAudioDuration(mediaPlayer?.duration)
-            binding.thumbnail.setImageBitmap(getAudioThumbnail(allAudioFiles[currentPlayingIndex]))
-            dialogThumbnail?.setImageBitmap(getAudioThumbnail(allAudioFiles[currentPlayingIndex]))
+            binding.thumbnail.setImageBitmap(icon)
+            dialogThumbnail?.setImageBitmap(icon)
             binding.progressSeekBar.max = mediaPlayer!!.duration
             dialogProgressSeekBar?.max = mediaPlayer!!.duration
             isPlaying = true
-            createNotification(File(allAudioFiles[currentPlayingIndex]).name)
+            createNotification(File(allAudioFiles[currentPlayingIndex].path).name)
             startProgress()
 
             // Start playing the audio
@@ -359,13 +379,13 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
         if (allAudioFiles.size != 0){
             currentPlayingIndex++
             if (currentPlayingIndex < allAudioFiles.size) {
-                playAudio(allAudioFiles[currentPlayingIndex])
+                playAudio(allAudioFiles[currentPlayingIndex].path)
             } else {
 //                          for last item whether its play or not
 //                        mediaPlayer?.release()
 //                        mediaPlayer = null
                 currentPlayingIndex = 0
-                playAudio(allAudioFiles[currentPlayingIndex])
+                playAudio(allAudioFiles[currentPlayingIndex].path)
             }
         }
     }
@@ -374,32 +394,14 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
             currentPlayingIndex--
             if (currentPlayingIndex < 0) {
                 currentPlayingIndex = allAudioFiles.size-1
-                playAudio(allAudioFiles[currentPlayingIndex])
+                playAudio(allAudioFiles[currentPlayingIndex].path)
             } else {
 //                          for last item whether its play or not
 //                        mediaPlayer?.release()
 //                        mediaPlayer = null
-                playAudio(allAudioFiles[currentPlayingIndex])
+                playAudio(allAudioFiles[currentPlayingIndex].path)
             }
         }
-    }
-    private fun getAudioThumbnail(audioPath: String): Bitmap? {
-        try {
-            val retriever = MediaMetadataRetriever()
-            retriever.setDataSource(audioPath)
-
-            val rawArt: ByteArray? = retriever.embeddedPicture
-
-            return if (rawArt != null) {
-                BitmapFactory.decodeByteArray(rawArt, 0, rawArt.size)
-            } else {
-                BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
-            }
-        }
-        catch (e:IllegalArgumentException){
-            return  BitmapFactory.decodeResource(resources, R.drawable.mobi_audio_music_icon)
-        }
-
     }
     private fun startProgress(){
         currentDurationJob = CoroutineScope(Dispatchers.Main).launch {
@@ -436,6 +438,30 @@ class MobiAudioPlayer: AppCompatActivity(), AudioAdapter.ClickListener {
 
         return durationString
     }
+
+    suspend fun getDurationFromMediaStore(filePath: String): String  = withContext(Dispatchers.IO){
+        val projection = arrayOf(MediaStore.Audio.Media.DURATION)
+        val selection = "${MediaStore.Audio.Media.DATA} = ?"
+        val selectionArgs = arrayOf(filePath)
+
+        contentResolver.query(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            selection,
+            selectionArgs,
+            null
+        )?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val durationIndex = cursor.getColumnIndex(MediaStore.Audio.Media.DURATION)
+                if (durationIndex != -1) {
+                    val durationMs = cursor.getLong(durationIndex)
+                    return@withContext durationMs.toString()
+                }
+            }
+        }
+        return@withContext "0"
+    }
+
     override fun onDestroy() {
         notificationManager?.cancelAll()
         unregisterReceiver(audioBroadcastReceiver)

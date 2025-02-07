@@ -18,7 +18,6 @@
             android:id="@+id/audioImage"
             android:layout_width="80dp"
             android:layout_height="70dp"
-            android:scaleType="centerCrop"
             android:src="@drawable/mobi_audio_music_icon" />
 
         <LinearLayout
@@ -26,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|left"
             android:orientation="vertical"
-            android:paddingStart="10dp">
+            android:paddingStart="10sp">
 
             <TextView
                 android:id="@+id/audio_title"
