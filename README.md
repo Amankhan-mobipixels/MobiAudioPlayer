@@ -18,8 +18,10 @@ dependencies:
 
 ````
 How to use:
+
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.sample_image)
-        val intent = Intent(this, MobiAudioPlayer::class.java)
+        
+	val intent = Intent(this, MobiAudioPlayer::class.java)
         intent.putExtra("playListName","Downloads")
         intent.putStringArrayListExtra("data", list)
 	intent.putExtra("icon", bitmap)
