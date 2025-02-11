@@ -13,7 +13,7 @@ add dependency in module level gradle
 ````
 dependencies:
 {
-   implementation 'com.github.Amankhan-mobipixels:MobiAudioPlayer:1.1.1'
+   implementation 'com.github.Amankhan-mobipixels:MobiAudioPlayer:1.1.2'
 }
 
 ````
