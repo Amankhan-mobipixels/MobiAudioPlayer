@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@android:color/white"
+    android:layoutDirection="ltr"
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/close"
